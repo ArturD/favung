@@ -76,9 +76,7 @@ end
 class Agent
   def execute(submission)
     source_path = submission.solution_path
-    run = submission.runs.build
-    run.status = :running
-    submission.save!
+    run = submission.runs.create :status => :running 
     output_path = run.output_path
     
     # TODO(zurkowski) Replace it with something nicer :)
@@ -97,6 +95,7 @@ class Agent
     Dir.chdir(TMP_DIR) do
       source = submission.source
       run.output = runner.run(source)
+      run.save!
     end
 
     run.status = :accept  # FIXME hardcode
