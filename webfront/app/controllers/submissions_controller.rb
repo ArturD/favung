@@ -8,8 +8,9 @@ class SubmissionsController < ApplicationController
 
   def create
     submission = Submission.create!
+    submission.solution_path = submission.id.to_s
     submission.save!
-    GridFileSystemHelper::store_file(submission.id.to_s, params[:script][:script])
+    GridFileSystemHelper::store_file(submission.solution_path, params[:script][:script])
 
     AgentConnection.run_script(submission)
 

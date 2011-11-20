@@ -38,7 +38,7 @@ end
 
 class Agent
   def execute(submission)
-    input_path = submission.id.to_s
+    input_path = submission.solution_path
     run = submission.runs.build
     run.status = :running
     submission.save!
