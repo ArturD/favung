@@ -1,51 +1,21 @@
 class Task
-  # TODO(doriath) move to initialization
-  if Rails.env == "development"
-    DATA_DIR = File.join(Rails.root, 'data')
-  else
-    DATA_DIR = File.join(Rails.root, 'features', 'data')
-  end
-  TASKS_DIR = File.join(DATA_DIR, 'tasks')
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
+  field :name
+  field :short_name
+  field :content_path
 
-  attr_accessor :name
+  attr_accessor :content # FIXME: transient field so that form helper works. There must be a better way
+  
+  embeds_many :task_instances
+  
+  before_create :generate_content_path
 
-  def initialize(attributes = {})
-    attributes.each do |name, value|
-      send("#{name}=", value)
-    end
-  end
-
-  def to_param
-    name
-  end
-
-  def index_path
-    File.join(TASKS_DIR, name, 'index')
-  end
-
-  def self.find(name)
-    if FileHelpers.directories(TASKS_DIR).include? name
-      Task.new(name: name)
-    end
-  end
-
-  def self.all
-    tasks = []
-    FileHelpers.directories(TASKS_DIR).each do |task_name|
-      tasks << Task.new(name: task_name)
-    end
-    tasks
+  protected
+  def generate_content_path
+    puts "generating content_path (old:#{@content_path}, short_name:#{@short_name}) "
+    @content_path = "task_content_" + UUIDTools::UUID.random_create.to_s
   end
 end
 
-module FileHelpers
-  def self.directories(dir_path)
-    Dir[File.join(dir_path, '*')].map do |dir_name|
-      File.basename(dir_name) if Dir.exists?(dir_name)
-    end.compact
-  end
-end
