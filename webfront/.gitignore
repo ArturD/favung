@@ -6,3 +6,4 @@ tmp/
 .rspec
 data/*
 features/data/*
+.sass-cache
