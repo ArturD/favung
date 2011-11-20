@@ -19,8 +19,8 @@ class Submission
     if runs.size == 0
       return :pending
     end
-    if runs.any? {|run| run.status == :acc }
-      return :acc
+    if runs.any? {|run| run.status == :accept }
+      return :accept
     end
     if runs.any? {|run| run.status == :running }
       return :running

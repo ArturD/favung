@@ -99,7 +99,7 @@ class Agent
       run.output = runner.run(source)
     end
 
-    run.status = :acc  # FIXME hardcode
+    run.status = :accept  # FIXME hardcode
     run.time = 1.23   
     
     submission.save!

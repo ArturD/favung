@@ -1,7 +1,8 @@
 %h1 Submission
 
-%p status:
-= @submission.status
+%p{:class => "status #{@submission.status}"}
+  status:
+  = @submission.status
 
 Task:
 = @submission.task
