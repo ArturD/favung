@@ -1,9 +1,28 @@
-%h1 Solution
+%h1 Submission
 
 %p status:
 = @submission.status
 
-%p All runs details:
+Task:
+= @submission.task
+%br
+
+Submission time:
+= @submission.created_at
+%br
+
+Source code:
+%pre
+  = @submission.source
+
+Output:
+%pre
+  - if @submission.runs.last != nil
+    = @submission.runs.last.output
+  - else
+    = "no runs"
+
+%p All runs:
 %ul
   - @submission.runs.each do |run|
     %li 

@@ -5,6 +5,7 @@ require 'mongoid'
 require 'eventmachine'
 require 'logger'
 require 'amqp'
+require 'fileutils'
 
 $logger = Logger.new(STDOUT)
 
@@ -35,28 +36,81 @@ $logger.info "loading models"
   require f
   $logger.info f
 end
+$logger.info "loading helpers"
+['../webfront/lib/favung/grid_file_system_helper'].each do |file| 
+  f = "#{file}.rb"
+  require f
+  $logger.info f
+end
+
+TMP_DIR = '/tmp/favung'
+
+class CppRunner
+  def run(source)
+    save_source(source)
+    compile
+    execute_binary
+  end
+
+  def compile
+    `g++ source.cpp -o submission`
+  end
+
+  def execute_binary
+    `./submission`
+  end
+
+  def save_source(source)
+    File.open('source.cpp', 'w') do |f|
+      f.write(source)
+    end
+  end
+end
+
+class RubyRunner
+  def run(source)
+    `ruby -e "#{source}"`
+  end
+end
 
 class Agent
   def execute(submission)
-    input_path = submission.solution_path
+    source_path = submission.solution_path
     run = submission.runs.build
     run.status = :running
     submission.save!
-
     output_path = run.output_path
+    
+    # TODO(zurkowski) Replace it with something nicer :)
+    runner = case submission.runner_name
+             when "CppRunner"
+               CppRunner.new
+             when "RubyRunner"
+               RubyRunner.new
+             else
+               $logger.info "Unknown runner name: #{submission.runner_name}"
+             end
 
-    script_file = Mongo::GridFileSystem.new($db).open(input_path, 'r')
-    script = script_file.read
-    script_file.close
+    prepare_environment
 
-    output = `ruby -e "#{script}"`
-    run.status = :acc
-    run.time = 1.23
+    output = nil
+    Dir.chdir(TMP_DIR) do
+      source = submission.source
+      run.output = runner.run(source)
+    end
 
-    output_file = Mongo::GridFileSystem.new($db).open(output_path, 'w')
-    output_file.write output
-    output_file.close
+    run.status = :acc  # FIXME hardcode
+    run.time = 1.23   
+    
     submission.save!
+
+    puts "== Output =="
+    puts run.output
+  end
+
+  def prepare_environment
+    FileUtils.rm_rf(TMP_DIR)
+    FileUtils.mkdir_p(TMP_DIR)
   end
 end
 
@@ -68,7 +122,7 @@ AMQP.start(configuration[:amqp]) do |connection|
   exchange = channel.direct("")
   queue.subscribe do |message|
     message = BSON.deserialize(message)
-    $logger.info "Processing script #{message['input']}"
+    $logger.info "Processing script #{message['submission_id']}"
     submission = Submission.find(message["submission_id"])
     if not submission
       $logger.error "Submission not found. id:  #{message['submission_id']}"
