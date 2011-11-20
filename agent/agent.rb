@@ -40,7 +40,7 @@ class Agent
   def execute(submission)
     input_path = submission.id.to_s
     run = submission.runs.build
-    run.status = :pending
+    run.status = :running
     submission.save!
 
     output_path = run.output_path
@@ -50,7 +50,7 @@ class Agent
     script_file.close
 
     output = `ruby -e "#{script}"`
-    run.status = :accept
+    run.status = :acc
     run.time = 1.23
 
     output_file = Mongo::GridFileSystem.new($db).open(output_path, 'w')

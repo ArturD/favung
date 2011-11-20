@@ -1,7 +1,9 @@
 %h1 Submit solution
 
-%p find me in /app/views/submissions/show
+%p status:
+= @submission.status
 
+%p All runs details:
 %ul
   - @submission.runs.each do |run|
     %li 
