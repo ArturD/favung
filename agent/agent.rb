@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
-require 'mongo'
-require 'eventmachine'
 require 'yaml'
+require 'mongo'
+require 'mongoid'
+require 'eventmachine'
 require 'logger'
 require 'amqp'
+
+$logger = Logger.new(STDOUT)
 
 def load_configuration
   environment = ENV['ENV'] || 'development'
@@ -19,22 +22,41 @@ def load_configuration
 end
 
 configuration = load_configuration
-connection = Mongo::Connection.new(configuration[:mongo]["host"])
-$db = connection.db(configuration[:mongo]["database"])
+Mongoid.configure do |config|
+  $logger.info "Connecting to mongo: host#{configuration[:mongo]["host"]} db:#{configuration[:mongo]["database"]}"
+  connection = Mongo::Connection.new(configuration[:mongo]["host"])
+  $db = connection.db(configuration[:mongo]["database"])
+  config.master = $db
+end
 
-$logger = Logger.new(STDOUT)
+$logger.info "loading models"
+['submission', 'run'].each do |file| 
+  f = "../webfront/app/models/#{file}.rb"
+  require f
+  $logger.info f
+end
 
 class Agent
-  def execute(input_path, output_path)
+  def execute(submission)
+    input_path = submission.id.to_s
+    run = submission.runs.build
+    run.status = :pending
+    submission.save!
+
+    output_path = run.output_path
+
     script_file = Mongo::GridFileSystem.new($db).open(input_path, 'r')
     script = script_file.read
     script_file.close
 
     output = `ruby -e "#{script}"`
+    run.status = :accept
+    run.time = 1.23
 
     output_file = Mongo::GridFileSystem.new($db).open(output_path, 'w')
     output_file.write output
     output_file.close
+    submission.save!
   end
 end
 
@@ -42,11 +64,16 @@ agent = Agent.new
 
 AMQP.start(configuration[:amqp]) do |connection|
   channel = AMQP::Channel.new(connection)
-  queue = channel.queue("scripts", auto_delete: true)
+  queue = channel.queue("submissions", auto_delete: true)
   exchange = channel.direct("")
   queue.subscribe do |message|
     message = BSON.deserialize(message)
     $logger.info "Processing script #{message['input']}"
-    agent.execute(message["input"], message["output"])
+    submission = Submission.find(message["submission_id"])
+    if not submission
+      $logger.error "Submission not found. id:  #{message['submission_id']}"
+    else
+      agent.execute submission
+    end
   end
 end

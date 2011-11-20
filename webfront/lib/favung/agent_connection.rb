@@ -11,18 +11,17 @@ module AgentConnection
   end
 
 
-  def run_script(input_file_name, output_file_name)
-    message = {input: input_file_name, output: output_file_name }
+  def run_script(submission)
+    message = {submission_id: submission.id }
     publish message
   end
 
   private
   def publish(message)
-    @exchange.publish BSON.serialize(message), key: 'scripts'
+    @exchange.publish BSON.serialize(message), key: 'submissions'
   end
 end
 
 config = YAML.load_file("#{Rails.root}/config/amqp.yml") || {}
 config = config[Rails.env] || {}
-
 AgentConnection.configure(config)

@@ -2,14 +2,17 @@ class SubmissionsController < ApplicationController
   def new
   end
 
+  def show
+    @submission = Submission.find(params[:id])
+  end
+
   def create
     submission = Submission.create!
-    run = submission.runs.build
     submission.save!
     GridFileSystemHelper::store_file(submission.id.to_s, params[:script][:script])
 
-    AgentConnection.run_script(submission.id.to_s, run.id.to_s)
+    AgentConnection.run_script(submission)
 
-    redirect_to submission_run_path(submission, run)
+    redirect_to submission_path(submission)
   end
 end

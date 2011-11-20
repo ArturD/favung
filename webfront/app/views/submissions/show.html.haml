@@ -1,0 +1,11 @@
+%h1 Submit solution
+
+%p find me in /app/views/submissions/show
+
+%ul
+  - @submission.runs.each do |run|
+    %li 
+      %p run
+      = run.id
+      = run.status
+      = run.time
