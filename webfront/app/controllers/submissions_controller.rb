@@ -13,9 +13,8 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    submission = current_user.submissions.build(task: params[:submission][:task])
+    submission = current_user.submissions.build(params[:submission] )
     submission.runner_name = "CppRunner" #FIXME user should be able to set this
-    submission.source = params[:submission][:source]
     submission.save!
 
     AgentConnection.run_script(submission)

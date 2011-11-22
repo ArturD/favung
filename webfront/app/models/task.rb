@@ -5,17 +5,19 @@ class Task
   field :name
   field :short_name
   field :content_path
-
-  attr_accessor :content # FIXME: transient field so that form helper works. There must be a better way
+  field :git_path
   
-  embeds_many :task_instances
+  attr_protected :content_path
   
-  before_create :generate_content_path
+  has_many :submissions
 
-  protected
-  def generate_content_path
-    puts "generating content_path (old:#{@content_path}, short_name:#{@short_name}) "
-    @content_path = "task_content_" + UUIDTools::UUID.random_create.to_s
+  def content=(val)
+      self.content_path = "task/" + UUIDTools::UUID.random_create.to_s
+      GridFileSystemHelper::store_file(self.content_path, val)
+      @content = val
+  end
+  def content
+    @content ||= GridFileSystemHelper::read_file(self.content_path)
   end
 end
 

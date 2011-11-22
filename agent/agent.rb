@@ -6,8 +6,22 @@ require 'eventmachine'
 require 'logger'
 require 'amqp'
 require 'fileutils'
-
+require './git_judge.rb'
 $logger = Logger.new(STDOUT)
+
+$logger.info "loading models"
+['submission', 'run', 'task'].each do |file| 
+  f = "../webfront/app/models/#{file}.rb"
+  require f
+  $logger.info f
+end
+
+$logger.info "loading helpers"
+['../webfront/lib/favung/grid_file_system_helper'].each do |file| 
+  f = "#{file}.rb"
+  require f
+  $logger.info f
+end
 
 def load_configuration
   environment = ENV['ENV'] || 'development'
@@ -30,78 +44,22 @@ Mongoid.configure do |config|
   config.master = $db
 end
 
-$logger.info "loading models"
-['submission', 'run'].each do |file| 
-  f = "../webfront/app/models/#{file}.rb"
-  require f
-  $logger.info f
-end
-$logger.info "loading helpers"
-['../webfront/lib/favung/grid_file_system_helper'].each do |file| 
-  f = "#{file}.rb"
-  require f
-  $logger.info f
-end
 
 TMP_DIR = '/tmp/favung'
-
-class CppRunner
-  def run(source)
-    save_source(source)
-    compile
-    execute_binary
-  end
-
-  def compile
-    `g++ source.cpp -o submission`
-  end
-
-  def execute_binary
-    `./submission`
-  end
-
-  def save_source(source)
-    File.open('source.cpp', 'w') do |f|
-      f.write(source)
-    end
-  end
-end
-
-class RubyRunner
-  def run(source)
-    `ruby -e "#{source}"`
-  end
-end
 
 class Agent
   def execute(submission)
     source_path = submission.solution_path
     run = submission.runs.create :status => :running 
     output_path = run.output_path
+
+    judge = GitJudge.new(submission.task)
+    result = judge.judge submission
     
-    # TODO(zurkowski) Replace it with something nicer :)
-    runner = case submission.runner_name
-             when "CppRunner"
-               CppRunner.new
-             when "RubyRunner"
-               RubyRunner.new
-             else
-               $logger.info "Unknown runner name: #{submission.runner_name}"
-             end
-
-    prepare_environment
-
-    output = nil
-    Dir.chdir(TMP_DIR) do
-      source = submission.source
-      run.output = runner.run(source)
-      run.save!
-    end
-
-    run.status = :accept  # FIXME hardcode
-    run.time = 1.23   
+    run.status = result[:status]
+    run.time = 1.23
+    run.save!
     
-    submission.save!
 
     puts "== Output =="
     puts run.output

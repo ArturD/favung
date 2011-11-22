@@ -25,7 +25,7 @@ class Submission
     if runs.any? {|run| run.status == :running }
       return :running
     end
-    last_run = runs.max_by {|a,b| a.created_at <=> b.created_at}
+    last_run = runs.last # TODO is that right ? 
     return last_run.status
   end
 
@@ -35,7 +35,6 @@ class Submission
       @source = val
   end
   def source
-    logger.info "trying to read #{self.solution_path}"
     @source ||= GridFileSystemHelper::read_file(self.solution_path)
   end
 end

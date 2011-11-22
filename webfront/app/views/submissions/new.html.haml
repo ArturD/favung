@@ -1,7 +1,7 @@
 %h1 Submit solution
 
 = form_for 'submission', url: submissions_path do |f|
-  = f.select :task, Task.all.map(&:name)
+  = f.select(:task, Task.all.map {|t| [t.name, t.id] })
   %br
   = f.text_area :source
   %br
