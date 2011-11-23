@@ -8,10 +8,6 @@ class SubmissionsController < ApplicationController
   def new
   end
 
-  def show
-    @submission = Submission.find(params[:id])
-  end
-
   def create
     submission = current_user.submissions.build(params[:submission] )
     submission.runner_name = "CppRunner" #FIXME user should be able to set this
@@ -21,9 +17,8 @@ class SubmissionsController < ApplicationController
 
     redirect_to submission_path submission, notice: 'Your solution has been submitted successfuly'
   end
-
-  # FIXME how method name should look like here ?
-  def show_mine
+  
+  def show
     @submission = current_user.submissions.find(params[:id])
   end
 end

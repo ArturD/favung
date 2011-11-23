@@ -15,15 +15,14 @@ class GitJudge
     
     result = "unknonw";
     source_path = save_source submission.source
-    Open3.popen3("ruby runner.rb -c cpp -s #{source_path} -p \"#{@local_path}\"") do |stdin, stdout, stderr, status|
-      stdin.close
-      result = stdout.read
-      if status.value.exitstatus != 0
-        result = { :status => :error, :error => "Runner returned error code: #{status.value.exitstatus}, stderr:\n#{stderr.read}" }
-      else
-        result = YAML::load(result)
-      end
-      
+    $logger.info "exec: ruby runner.rb -c cpp -s #{source_path} -p \"#{@local_path}\""
+    result = `ruby runner.rb -c cpp -s #{source_path} -p \"#{@local_path}\"`
+    $logger.info " >> "
+    $logger.info result
+    if $?.exitstatus != 0
+      result = { :status => :error, :error => "Runner returned error code: #{status.value.exitstatus}, stderr:\n#{stderr.read}" }
+    else
+      result = YAML::load(result)
     end
     return result
   end
