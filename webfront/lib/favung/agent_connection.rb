@@ -7,7 +7,11 @@ module AgentConnection
   def configure(config)
     @bunny = Bunny.new(config)
     @bunny.start
-    @exchange = @bunny.exchange("")
+    # FIXME we create queue to make sure durable queue exists
+    # this should be probably confitured in rabbitMQ. 
+    # check if this is nessesary anyways.
+    @queue = Bunny::Queue.new(@bunny, 'submissions', :durable =>true) 
+    @exchange = @bunny.exchange("", :type => :queue)
   end
 
 
@@ -18,7 +22,7 @@ module AgentConnection
 
   private
   def publish(message)
-    @exchange.publish BSON.serialize(message), key: 'submissions'
+    @exchange.publish BSON.serialize(message), key: 'submissions', persistent: true
   end
 end
 

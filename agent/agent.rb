@@ -75,7 +75,7 @@ agent = Agent.new
 
 AMQP.start(configuration[:amqp]) do |connection|
   channel = AMQP::Channel.new(connection)
-  queue = channel.queue("submissions", auto_delete: true)
+  queue = channel.queue("submissions", durable: true)
   exchange = channel.direct("")
   queue.subscribe do |message|
     message = BSON.deserialize(message)
