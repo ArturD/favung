@@ -1,10 +1,18 @@
 %h1 History of submissions
 
-.submissions
-  - @submissions.each do |submission|
-    .submission
-      = submission.created_at
-      |
-      = submission.task
-      |
-      = link_to "See source", submission
+%table.submissions
+  %thead
+    %tr
+      %th data
+      %th zadanie
+      %th status
+      %th
+  %tbody
+    - @submissions.each do |submission|
+      %tr{:class=>cycle("even","odd"), :href=> submission_url(submission)}
+        %td= submission.created_at
+        %td= submission.task.name
+        %td{:class=>"status #{submission.status}"}
+          = submission.status
+        %td.actions
+          = link_to "details",submission_url(submission)

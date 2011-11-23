@@ -1,8 +1,25 @@
-$wrong_answer_color: #dd2222
-$accept_color:       #22dd22
+@import "tables"
+
+$wrong_answer_color:  #dd2222
+$accept_color:        #22dd22
 $pending_color:       #228888
+$runtime_error_color: #ff2222
 
 .status.wrong_answer
   color: $wrong_answer_color
 .status.accept
   color: $accept_color
+.status.pending
+  color: $pending_color
+.status.runtime_error
+  color: $runtime_error_color
+
+table.submissions
+  @include table-base
+  
+  margin: 0 auto
+  tr.even:hover
+    background-color: #f8f8f8
+  tr.odd:hover
+    background-color: #cfedf8
+    

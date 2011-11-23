@@ -2,7 +2,7 @@ class SubmissionsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @submissions = current_user.submissions
+    @submissions = current_user.submissions.order_by([:created_at, :desc])
   end
 
   def new
@@ -15,7 +15,7 @@ class SubmissionsController < ApplicationController
 
     AgentConnection.run_script(submission)
 
-    redirect_to submission_path submission, notice: 'Your solution has been submitted successfuly'
+    redirect_to submissions_path, notice: 'Your solution has been submitted successfuly'
   end
   
   def show
