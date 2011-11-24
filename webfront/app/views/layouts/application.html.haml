@@ -6,6 +6,7 @@
     = csrf_meta_tag
   %body{class: params[:controller]}
     #head
+      %div#logo
       %h1 favung
       #user_nav
         - if current_user

@@ -4,6 +4,7 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
 
 $footer-height: 25px
+$main-color: #9fc5e8
 
 html, body
   font-family: Verdana, Helvetica, Arial
@@ -19,15 +20,19 @@ body
 #head
   height: 200px
   width: 100%
-  background-color: #3d79d0
+  background-color: $main-color
   color: #fff
   font-family: Arial
   position: relative
+  #logo
+    width: 170px
+    height: 170px
+    background: url(/assets/favung_logo.png)
   h1 
     font-size: 100px
     position: absolute
-    left: 50px
-    top: 10px
+    left: 130px
+    top: 0px
     margin: 0
   #user_nav
     font-size: 12px
@@ -78,7 +83,7 @@ a
 
 #footer
   height: $footer-height
-  background-color: #3D79D0
+  background-color: $main-color 
   color: white
   width: 100%
   position: absolute
