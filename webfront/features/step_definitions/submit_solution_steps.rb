@@ -22,8 +22,6 @@ Then /^the solution should be send to the queue$/ do
 
   @published_messages.should have(1).message
   @published_messages.first.should == {
-    input: Submission.first.id.to_s,
-    output: "outputs/#{Submission.first.runs.last.id.to_s}",
-    runner: 'CppRunner'
+    submission_id: Submission.first.id
   }
 end

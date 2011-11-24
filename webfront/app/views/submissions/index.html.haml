@@ -9,7 +9,7 @@
       %th
   %tbody
     - @submissions.each do |submission|
-      %tr{:class=>cycle("even","odd"), :href=> submission_url(submission)}
+      %tr{:class=>"submission #{cycle("even","odd")}", :href=> submission_url(submission)}
         %td= submission.created_at
         %td= submission.task.name
         %td{:class=>"status #{submission.status}"}

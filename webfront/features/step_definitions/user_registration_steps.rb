@@ -3,10 +3,12 @@ When /^I follow to the sign up page$/ do
 end
 
 When /^I fill in sign up form$/ do
-  fill_in 'user_email', with: 'foo@example.org'
-  fill_in 'user_password', with: 'secret'
-  fill_in 'user_password_confirmation', with: 'secret'
-  click_on 'user_submit'
+  within('form') do
+    fill_in 'user_email', with: 'foo@example.org'
+    fill_in 'user_password', with: 'secret'
+    fill_in 'user_password_confirmation', with: 'secret'
+    click_on 'Sign up'
+  end
 end
 
 Then /^I should be signed in$/ do
@@ -25,7 +27,7 @@ end
 When /^I fill in sign in form$/ do
   fill_in 'user_email', with: @user.email
   fill_in 'user_password', with: @user.password
-  click_on 'user_submit'
+  click_on 'Sign in'
 end
 
 Given /^I am signed in user$/ do
