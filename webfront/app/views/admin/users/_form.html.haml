@@ -1,0 +1,7 @@
+= form_for [:admin, @user] do |f|
+  = f.label :email
+  = f.text_field :email
+  %br
+  = f.label :role
+  = f.collection_select :role,["user", "admin"], :to_s, :to_s
+  = f.submit

@@ -1,0 +1,25 @@
+%html
+  %head
+    %title Favung
+    = stylesheet_link_tag :admin
+    = javascript_include_tag :admin
+    = csrf_meta_tag
+  %body{class: params[:controller]}
+    #container
+      #user_nav
+        - if current_user
+          Logged in as
+          = current_user.email
+          = link_to 'Log out', destroy_user_session_path
+        - else
+          = link_to 'Sign up', new_user_registration_path
+          or
+          = link_to 'log in', new_user_session_path
+      - flash.each do |name, msg|
+        %div{id: "flash_#{name}"} msg
+      #menu
+        = link_to "Users", admin_users_path
+        |
+        \...
+
+      = yield

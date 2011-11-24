@@ -1,0 +1,11 @@
+%h2= @user.email
+
+-#%table.submissions
+-#  %tbody
+-#    - @user.submissions.each do |submission|
+-#      %tr.submission
+-#        %td= submission.created_at
+-#        %td= submission.task.name
+-#        %td{:class => "status"}
+-#          = submission.status 
+-#
