@@ -4,20 +4,20 @@ class Task
 
   field :name
   field :short_name
-  field :content_path
+  field :description_path
   field :git_path
   
-  attr_protected :content_path
+  attr_protected :description_path
   
   has_many :submissions
 
-  def content=(val)
-      self.content_path = "task/" + UUIDTools::UUID.random_create.to_s
-      GridFileSystemHelper::store_file(self.content_path, val)
-      @content = val
+  def description=(val)
+      self.description_path = "task/" + UUIDTools::UUID.random_create.to_s
+      GridFileSystemHelper::store_file(self.description_path, val)
+      @description = val
   end
-  def content
-    @content ||= GridFileSystemHelper::read_file(self.content_path)
+  def description
+    @description ||= GridFileSystemHelper::read_file(self.description_path)
   end
 end
 
