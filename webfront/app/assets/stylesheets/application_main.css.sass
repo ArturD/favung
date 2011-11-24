@@ -1,0 +1,122 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+
+$footer-height: 25px
+
+html, body
+  font-family: Verdana, Helvetica, Arial
+  font-size: 14px
+html
+  height: 100%
+
+body
+  margin: 0
+  position: relative
+  min-height: 100%
+
+#head
+  height: 200px
+  width: 100%
+  background-color: #3d79d0
+  color: #fff
+  font-family: Arial
+  position: relative
+  h1 
+    font-size: 100px
+    position: absolute
+    left: 50px
+    top: 10px
+    margin: 0
+  #user_nav
+    font-size: 12px
+    position: absolute
+    right: 10px
+    top: 5px
+  nav#menu
+    position: absolute
+    left: 50px
+    bottom: 5px
+    font-size: 20px
+  a
+    color: white
+    text-decoration: none
+
+a
+  img
+    border: none
+  color: #0000FF
+
+.clear
+  clear: both
+  height: 0
+  overflow: hidden
+
+#container
+  background-color: #FFF
+  margin: 20px 50px
+  min-height: 400px
+  padding-bottom: $footer-height+10px
+
+#flash_notice, #flash_error, #flash_alert
+  padding: 5px 8px
+  margin: 10px 0
+
+#flash_notice
+  background-color: #CFC
+  border: solid 1px #6C6
+
+#flash_error, #flash_alert
+  background-color: #FCC
+  border: solid 1px #C66
+
+#user_nav
+  float: right
+
+#menu
+
+#footer
+  height: $footer-height
+  background-color: #3D79D0
+  color: white
+  width: 100%
+  position: absolute
+  bottom: 0
+  #powered_by
+    padding-top: 5px
+    margin-left: 10px
+
+form
+  label
+    display: block
+    margin-bottom: 2px
+  .field, .actions
+    margin: 12px 0
+
+.fieldWithErrors
+  display: inline
+
+.error_messages
+  width: 400px
+  border: 2px solid #CF0000
+  padding: 0px
+  margin-bottom: 20px
+  background-color: #f0f0f0
+  font-size: 12px
+  h2
+    text-align: left
+    font-weight: bold
+    padding: 5px 10px
+    font-size: 12px
+    margin: 0
+    background-color: #c00
+    color: #fff
+  p
+    margin: 8px 10px
+  ul
+    margin: 15px 0
+
+input[type=checkbox]
+  float: left
+  margin-right: 8px
