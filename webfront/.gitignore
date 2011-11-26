@@ -7,3 +7,4 @@ tmp/
 data/*
 features/data/*
 .sass-cache
+Gemfile.lock
