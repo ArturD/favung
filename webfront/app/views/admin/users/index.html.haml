@@ -1,9 +1,17 @@
 %table.users
-  - @users.each do |user|
-    %tr.task
-      %td= link_to user.email, admin_user_url(user)
-      %td
-        = link_to 'Edit', edit_admin_user_path(user)
-        = link_to 'Destroy', [:admin, user], confirm: 'Are you sure you want to remove this user?', method: :delete
+  %thead
+    %tr
+      %th id
+      %th email
+      %th role
+  %tbody
+    - @users.each do |user|
+      %tr.task
+        %td= user.id
+        %td= link_to user.email, admin_user_url(user)
+        %td= user.role
+        %td
+          = link_to 'Edit', edit_admin_user_path(user)
+          = link_to 'Destroy', [:admin, user], confirm: 'Are you sure you want to remove this user?', method: :delete
 
 = link_to 'New User', new_admin_user_path

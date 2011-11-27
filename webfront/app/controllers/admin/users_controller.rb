@@ -14,6 +14,8 @@ class Admin::UsersController < Admin::ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
+      @user.role = params[:user][:role] #FIXME validation needed ?
+      @user.save!
       flash[:notice] = "User updated"
       redirect_to admin_user_url @user
     else 

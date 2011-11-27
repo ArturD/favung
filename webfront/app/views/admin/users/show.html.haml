@@ -1,11 +1,14 @@
-%h2= @user.email
+%h2 User details
 
--#%table.submissions
--#  %tbody
--#    - @user.submissions.each do |submission|
--#      %tr.submission
--#        %td= submission.created_at
--#        %td= submission.task.name
--#        %td{:class => "status"}
--#          = submission.status 
--#
+%label id:
+= @user.id
+%br
+
+%label email:
+= @user.email
+%br
+
+%label role:
+= @user.role
+%br
+
