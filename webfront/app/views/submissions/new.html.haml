@@ -1,6 +1,6 @@
 %h1 Submit solution
 
 = form_for "script", url: submissions_path do |f|
-  = f.text_area :script
+  = f.text_area :script, {:class=>"code-editor"}
   %br
   = f.submit
