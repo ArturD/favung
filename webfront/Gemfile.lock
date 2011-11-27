@@ -52,6 +52,7 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.2.2)
       ffi (~> 1.0.6)
+    codemirror-rails (0.3.1)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -190,6 +191,7 @@ DEPENDENCIES
   bson_ext
   bunny
   capybara
+  codemirror-rails
   coffee-script
   cucumber
   cucumber-rails
@@ -199,8 +201,8 @@ DEPENDENCIES
   fabrication
   faker
   haml
-  mocha
   jquery-rails
+  mocha
   mongoid
   pickle
   rails (~> 3.1.0)
