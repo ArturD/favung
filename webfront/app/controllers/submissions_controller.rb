@@ -5,11 +5,11 @@ class SubmissionsController < ApplicationController
     "#include<iostream>
 using namespace std;
 int main() {
-  int n;
-  cin >> n;
-
   // use to reduce iostream overhead. It's still slower than stdio
   ios_base::sync_with_stdio(false);
+  
+  int n;
+  cin >> n;
 
   while(n--) {
     int x;
