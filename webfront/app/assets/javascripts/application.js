@@ -6,19 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
 //= require codemirror
 //= require codemirror/modes/clike
-
-$(function() {
-  $('.code-editor').each(function() {
-    var editor = CodeMirror.fromTextArea(this, { 
-      lineNumbers: true,
-      matchBrackets: true,
-      mode: 'text/x-c++src'
-    });
-    $("input").live("click",function() {
-      editor.save();
-    });
-  });
-});
+//= require_tree ./application/

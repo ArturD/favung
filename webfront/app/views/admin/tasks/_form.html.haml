@@ -1,8 +1,17 @@
+
+%h1 Add new task
+
 = form_for [:admin, @task] do |f|
-  = f.label :name
+  = f.label :git_path, "Judge repo path (eg. https://server/a.git):"
+  = f.text_field :git_path
+  
+  = f.label :name, "Name:"
   = f.text_field :name
-  %br
-  = f.label :description
+  
+  = f.label :short_name, "Short name"
+  = f.text_field :short_name
+  
+  = f.label :description, "Task description"
   = f.text_area :description
   %br
   = f.submit
