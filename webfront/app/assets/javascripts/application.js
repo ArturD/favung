@@ -17,5 +17,8 @@ $(function() {
       matchBrackets: true,
       mode: 'text/x-c++src'
     });
+    $("input").live("click",function() {
+      editor.save();
+    });
   });
 });
