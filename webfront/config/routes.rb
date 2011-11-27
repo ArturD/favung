@@ -9,6 +9,7 @@ Favung::Application.routes.draw do
   
   namespace :admin do
     resources :users
+    resources :tasks
   end
   # The priority is based upon order of creation:
   # first created -> highest priority.

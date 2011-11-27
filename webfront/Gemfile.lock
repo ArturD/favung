@@ -199,8 +199,8 @@ DEPENDENCIES
   fabrication
   faker
   haml
-  mocha
   jquery-rails
+  mocha
   mongoid
   pickle
   rails (~> 3.1.0)
