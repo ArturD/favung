@@ -19,5 +19,8 @@ class Task
   def description
     @description ||= GridFileSystemHelper::read_file(self.description_path)
   end
+  def description_html
+    BlueCloth.new(description).to_html
+  end
 end
 
