@@ -18,11 +18,11 @@ class User
   end
 
   def score
-    submissions.find_all {|s| s.status == :acepted}.size
+    self.submissions.find_all {|s| s.status == :accept}.size
   end
 
   def status_of(taskid)
-    submissions.find_all {|s| s.task.id == taskid}.
-      count {|s| s.status == :accepted} == 0 ? :accepted : :not_accepted # FIXME not_accepted :)
+    self.submissions.find_all {|s| s.task.id == taskid}.
+      count {|s| s.status == :accept} != 0 ? :accepted : :not_accepted # FIXME not_accepted :)
   end
 end
