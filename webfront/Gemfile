@@ -23,6 +23,7 @@ gem 'uglifier'
 gem 'jquery-rails'
 
 gem 'codemirror-rails'
+gem 'bluecloth'
 # Use unicorn as the web server
 # gem 'unicorn'
 
