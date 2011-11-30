@@ -16,4 +16,16 @@ class User
   def admin?
     role == "admin"
   end
+
+  def score
+    self.submissions.find_all {|s| s.status == :accept}.
+      map {|s| s.task.id}.
+      uniq.
+      size
+  end
+
+  def status_of(taskid)
+    self.submissions.find_all {|s| s.task.id == taskid}.
+      count {|s| s.status == :accept} != 0 ? :accepted : :not_accepted # FIXME not_accepted :)
+  end
 end
