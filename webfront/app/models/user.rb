@@ -18,7 +18,10 @@ class User
   end
 
   def score
-    self.submissions.find_all {|s| s.status == :accept}.size
+    self.submissions.find_all {|s| s.status == :accept}.
+      map {|s| s.task.id}.
+      uniq.
+      size
   end
 
   def status_of(taskid)
