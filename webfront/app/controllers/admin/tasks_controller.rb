@@ -22,6 +22,15 @@ class Admin::TasksController < Admin::ApplicationController
     end
   end
 
+  def new
+    @task = Task.new
+  end
+
+  def create
+    @task = Task.create!(params[:task])
+    redirect_to admin_task_url @task
+  end
+
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
