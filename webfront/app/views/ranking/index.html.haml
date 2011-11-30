@@ -1,0 +1,14 @@
+%h1 Ranking
+
+%table
+  %thead
+    %tr
+      %th user
+      - @tasks.each do |task|
+        %th= task.short_name
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.email
+        - @tasks.each do |task|
+          %td= user.status_of(task.id) == :accepted ? "x" : ""
